@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { registerNav } from "./modules/Navigation";
 import { insertToken } from "./redux/action/tokenAction";
 import DashboardContainer from "./components/pages/dashboard/DashboardContainer";
+import LoginContainer from "./pages/loginsignin/LoginContainer";
 
 class App extends Component {
   componentDidMount() {
@@ -19,6 +20,7 @@ class App extends Component {
       <div>
         <Router ref={registerNav}>
           <Switch>
+            <Route path="/login" component={LoginContainer} />
             <Route
               key="dashboard"
               path="/dashboard"
