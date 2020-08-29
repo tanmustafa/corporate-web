@@ -1,32 +1,42 @@
-import React from "react";
-import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import Login from "./components/pages/admin/Login";
-import Header from "./components/common/Header";
-import Footer from "./components/common/Footer";
+import React, { Component } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+import { connect } from "react-redux";
+import { registerNav } from "./modules/Navigation";
+import { insertToken } from "./redux/action/tokenAction";
+import DashboardContainer from "./components/pages/dashboard/DashboardContainer";
 
-function App() {
-  function getPage() {
+class App extends Component {
+  componentDidMount() {
+    this.props.insertToken();
+  }
+  render() {
     return (
-      <Router>
-        <div className="App">
+      <div>
+        <Router ref={registerNav}>
           <Switch>
-            <Route path="/admin">
-              <Login />
-            </Route>
+            <Route
+              key="dashboard"
+              path="/dashboard"
+              component={DashboardContainer}
+            />
+            ,
+            <Route exact path="/" component={DashboardContainer} />
+            <Redirect to="/login" />
           </Switch>
-        </div>
-      </Router>
+        </Router>
+      </div>
     );
   }
-
-  return (
-    <div className="container-fluid">
-      <Header />
-      {getPage()}
-      <Footer />
-    </div>
-  );
 }
-
-export default App;
+const mapStoreToProps = (state) => ({
+  token: state.token.user_token,
+});
+const mapDispatchToProps = {
+  insertToken,
+};
+export default connect(mapStoreToProps, mapDispatchToProps)(App);
